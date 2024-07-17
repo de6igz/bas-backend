@@ -1,1 +1,27 @@
 package handler
+
+import (
+	"bas-backend/domain/usecase"
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
+
+type PartnerHandler struct {
+	PartnerUsecase usecase.PartnerUsecase
+}
+
+func NewPartnerHandler(e *echo.Echo, pu usecase.PartnerUsecase) {
+	handler := &PartnerHandler{
+		PartnerUsecase: pu,
+	}
+	e.GET("/v1/partners", handler.GetPartners)
+}
+
+func (ph *PartnerHandler) GetPartners(c echo.Context) error {
+	partners, err := ph.PartnerUsecase.Fetch()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, partners)
+}
