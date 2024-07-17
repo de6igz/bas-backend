@@ -1,9 +1,14 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
+CREATE TABLE partners (
+                          id SERIAL PRIMARY KEY,
+                          url VARCHAR NOT NULL,
+                          description TEXT
+);
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+DROP TABLE partners
 -- +goose StatementEnd

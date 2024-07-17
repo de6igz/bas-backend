@@ -6,5 +6,5 @@ type Partner struct {
 }
 
 type PartnerRepository interface {
-	GetAll() ([]*Partner, error)
+	GetAll() ([]Partner, error)
 }

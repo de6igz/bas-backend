@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-#    depends_on:
-#      - db
+    depends_on:
+      - db
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -16,16 +16,16 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=myapp
 
-#  db:
-#    image: postgres:13-alpine
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#      POSTGRES_DB: myapp
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - db_data:/var/lib/postgresql/data
-#
-#volumes:
-#  db_data:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

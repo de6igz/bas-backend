@@ -3,7 +3,7 @@ package usecase
 import "bas-backend/domain/model"
 
 type PartnerUsecase interface {
-	Fetch() ([]*model.Partner, error)
+	Fetch() ([]model.Partner, error)
 }
 
 type partnerUsecase struct {
@@ -16,6 +16,6 @@ func NewPartnerUsecase(pr model.PartnerRepository) PartnerUsecase {
 	}
 }
 
-func (pu *partnerUsecase) Fetch() ([]*model.Partner, error) {
+func (pu *partnerUsecase) Fetch() ([]model.Partner, error) {
 	return pu.partnerRepo.GetAll()
 }
