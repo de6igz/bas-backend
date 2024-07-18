@@ -19,7 +19,7 @@ func NewPartnerHandler(e *echo.Echo, pu usecase.PartnerUsecase) {
 }
 
 func (ph *PartnerHandler) GetPartners(c echo.Context) error {
-	partners, err := ph.PartnerUsecase.Fetch()
+	partners, err := ph.PartnerUsecase.Fetch(c.Request().Context())
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}

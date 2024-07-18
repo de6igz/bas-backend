@@ -1,9 +1,12 @@
 package usecase
 
-import "bas-backend/domain/model"
+import (
+	"bas-backend/domain/model"
+	"context"
+)
 
 type PartnerUsecase interface {
-	Fetch() ([]model.Partner, error)
+	Fetch(ctx context.Context) ([]model.Partner, error)
 }
 
 type partnerUsecase struct {
@@ -16,6 +19,6 @@ func NewPartnerUsecase(pr model.PartnerRepository) PartnerUsecase {
 	}
 }
 
-func (pu *partnerUsecase) Fetch() ([]model.Partner, error) {
-	return pu.partnerRepo.GetAll()
+func (pu *partnerUsecase) Fetch(ctx context.Context) ([]model.Partner, error) {
+	return pu.partnerRepo.GetAll(ctx)
 }

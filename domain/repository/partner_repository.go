@@ -10,7 +10,7 @@ import (
 )
 
 type PartnerRepository interface {
-	GetAll() ([]model.Partner, error)
+	GetAll(ctx context.Context) ([]model.Partner, error)
 }
 
 type partnerRepository struct {
@@ -38,8 +38,15 @@ func NewPartnerRepository(ctx context.Context, config *config.Config) PartnerRep
 	}
 }
 
-func (p *partnerRepository) GetAll() ([]model.Partner, error) {
-	// Здесь нужно добавить логику для работы с базой данных
+func (p *partnerRepository) GetAll(ctx context.Context) ([]model.Partner, error) {
+	sql := "select url,description from partners"
+	var partners []model.Partner
+	_, err := p.db.QueryContext(ctx, &partners, sql)
+	if err != nil {
+		log.Printf("error getting partners: %v", err)
 
-	return make([]model.Partner, 0), nil
+		return nil, err
+	}
+
+	return partners, nil
 }
