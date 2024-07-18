@@ -3,7 +3,9 @@ package repository
 import (
 	"bas-backend/config"
 	"bas-backend/domain/model"
+	"context"
 	"github.com/go-pg/pg/v10"
+	"log"
 	"strconv"
 )
 
@@ -15,9 +17,9 @@ type partnerRepository struct {
 	db *pg.DB
 }
 
-func NewPartnerRepository(config *config.Config) PartnerRepository {
+func NewPartnerRepository(ctx context.Context, config *config.Config) PartnerRepository {
 
-	pg.Connect(&pg.Options{
+	connection := pg.Connect(&pg.Options{
 		Addr:            config.Database.Host + ":" + strconv.Itoa(config.Database.Port),
 		User:            config.Database.User,
 		Password:        config.Database.Password,
@@ -25,8 +27,14 @@ func NewPartnerRepository(config *config.Config) PartnerRepository {
 		MaxRetries:      3,
 		MaxRetryBackoff: 3,
 	})
+
+	err := connection.Ping(ctx)
+	if err != nil {
+		log.Fatalf("error connecting to database: %v", err)
+	}
+
 	return &partnerRepository{
-		db: nil,
+		db: connection,
 	}
 }
 

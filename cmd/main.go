@@ -4,6 +4,7 @@ import (
 	"bas-backend/config"
 	"bas-backend/internal/app/http"
 	"bas-backend/pkg/echo"
+	"context"
 	"fmt"
 	"log"
 )
@@ -13,9 +14,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
 	}
-
+	ctx := context.Background()
 	e := echo.New()
-	http.RegisterRoutes(e, cfg)
+	http.RegisterRoutes(ctx, e, cfg)
 	address := fmt.Sprintf(":%d", cfg.Server.Port)
 	e.Logger.Fatal(e.Start(address))
 }
