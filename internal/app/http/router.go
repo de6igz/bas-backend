@@ -2,7 +2,7 @@ package http
 
 import (
 	"bas-backend/config"
-	"bas-backend/domain/repository"
+	"bas-backend/domain/dataproviders"
 	"bas-backend/domain/usecase"
 	"bas-backend/internal/app/http/handler"
 	"context"
@@ -11,9 +11,13 @@ import (
 )
 
 func RegisterRoutes(ctx context.Context, e *echo.Echo, cfg *config.Config) {
-	partnerRepo := repository.NewPartnerRepository(ctx, cfg)
-	partnerUsecase := usecase.NewPartnerUsecase(partnerRepo)
-	handler.NewPartnerHandler(e, partnerUsecase)
+	// Инициализация датапровайдеров
+	providers := dataproviders.NewProviders(ctx, cfg)
 
-	// Повторить для проектов и документов
+	// Инициализация юзкейсов
+	partnerUsecase := usecase.NewPartnerUsecase(providers)
+
+	// Инициализация ручек
+	handler.NewPartnerHandler(e, "/v1/partners", partnerUsecase)
+
 }

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bas-backend/domain/dataproviders"
 	"bas-backend/domain/model"
 	"context"
 )
@@ -13,9 +14,10 @@ type partnerUsecase struct {
 	partnerRepo model.PartnerRepository
 }
 
-func NewPartnerUsecase(pr model.PartnerRepository) PartnerUsecase {
+func NewPartnerUsecase(providers dataproviders.Providers) PartnerUsecase {
+
 	return &partnerUsecase{
-		partnerRepo: pr,
+		partnerRepo: providers.GetPartnerRepository(),
 	}
 }
 

@@ -11,11 +11,11 @@ type PartnerHandler struct {
 	PartnerUsecase usecase.PartnerUsecase
 }
 
-func NewPartnerHandler(e *echo.Echo, pu usecase.PartnerUsecase) {
+func NewPartnerHandler(e *echo.Echo, route string, pu usecase.PartnerUsecase) {
 	handler := &PartnerHandler{
 		PartnerUsecase: pu,
 	}
-	e.GET("/v1/partners", handler.GetPartners)
+	e.GET(route, handler.GetPartners)
 }
 
 func (ph *PartnerHandler) GetPartners(c echo.Context) error {
