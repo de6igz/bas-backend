@@ -8,5 +8,5 @@ type Partner struct {
 }
 
 type PartnerRepository interface {
-	GetAll(ctx context.Context) ([]Partner, error)
+	GetAllPartners(ctx context.Context) ([]Partner, error)
 }

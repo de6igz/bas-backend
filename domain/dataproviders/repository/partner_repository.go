@@ -10,7 +10,7 @@ import (
 )
 
 type PartnerRepository interface {
-	GetAll(ctx context.Context) ([]model.Partner, error)
+	GetAllPartners(ctx context.Context) ([]model.Partner, error)
 }
 
 type partnerRepository struct {
@@ -38,7 +38,7 @@ func NewPartnerRepository(ctx context.Context, config *config.Config) PartnerRep
 	}
 }
 
-func (p *partnerRepository) GetAll(ctx context.Context) ([]model.Partner, error) {
+func (p *partnerRepository) GetAllPartners(ctx context.Context) ([]model.Partner, error) {
 	sql := "select url,description from partners"
 	var partners []model.Partner
 	_, err := p.db.QueryContext(ctx, &partners, sql)

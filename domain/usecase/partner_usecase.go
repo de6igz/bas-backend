@@ -22,5 +22,5 @@ func NewPartnerUsecase(providers dataproviders.Providers) PartnerUsecase {
 }
 
 func (pu *partnerUsecase) Fetch(ctx context.Context) ([]model.Partner, error) {
-	return pu.partnerRepo.GetAll(ctx)
+	return pu.partnerRepo.GetAllPartners(ctx)
 }
