@@ -10,3 +10,7 @@ type Partner struct {
 type PartnerRepository interface {
 	GetAllPartners(ctx context.Context) ([]Partner, error)
 }
+
+type ProjectRepository interface {
+	GetAllProjects(ctx context.Context) ([]Project, error)
+}

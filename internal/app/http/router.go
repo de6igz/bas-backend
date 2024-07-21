@@ -16,8 +16,10 @@ func RegisterRoutes(ctx context.Context, e *echo.Echo, cfg *config.Config) {
 
 	// Инициализация юзкейсов
 	partnerUsecase := usecase.NewPartnerUsecase(providers)
+	projectUsecase := usecase.NewProjectUsecase(providers)
 
 	// Инициализация ручек
 	handler.NewPartnerHandler(e, "/v1/partners", partnerUsecase)
+	handler.NewProjectHandler(e, "/v1/projects", projectUsecase)
 
 }
