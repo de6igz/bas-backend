@@ -19,6 +19,10 @@ func NewDocumentHandler(e *echo.Echo, route string, pu usecase.DocumentsUsecase)
 	e.GET(route, handler.GetDocuments)
 }
 
+// GetDocuments получить список всех документов
+// @Summary получить список всех документов
+// @Success      200 {object}  dto.DocDto
+// @Router       /v1/docs [get]
 func (ph *DocumentHandler) GetDocuments(c echo.Context) error {
 	docs, err := ph.documentUsecase.GetAllDocuments(c.Request().Context())
 	if err != nil {

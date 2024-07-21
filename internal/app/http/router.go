@@ -6,6 +6,7 @@ import (
 	"bas-backend/domain/usecase"
 	"bas-backend/internal/app/http/handler/v1"
 	"context"
+	echoSwagger "github.com/swaggo/echo-swagger"
 
 	"github.com/labstack/echo/v4"
 )
@@ -23,5 +24,8 @@ func RegisterRoutes(ctx context.Context, e *echo.Echo, cfg *config.Config) {
 	v1.NewPartnerHandler(e, "/v1/partners", partnerUsecase)
 	v1.NewProjectHandler(e, "/v1/projects", projectUsecase)
 	v1.NewDocumentHandler(e, "/v1/docs", documentUsecase)
+
+	// Инициализация сваггера
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 }

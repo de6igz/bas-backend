@@ -24,6 +24,11 @@ func NewProjectHandler(e *echo.Echo, route string, pu usecase.ProjectUsecase) {
 
 }
 
+// GetProjects получить список всех проектов
+// @Summary получить список всех проектов. Чтобы получить инфу об одном проекте нужно указать query param
+// @Success      200 {object}  dto.ProjectsDto
+// @Param        id   query      int  false  "ID проекта"
+// @Router       /v1/projects [get]
 func (ph *ProjectHandler) GetProjects(c echo.Context) error {
 	idStr := c.QueryParam("id")
 

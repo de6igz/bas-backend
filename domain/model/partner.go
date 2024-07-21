@@ -3,8 +3,8 @@ package model
 import "context"
 
 type Partner struct {
-	URL         string `json:"url"`
-	Description string `json:"description"`
+	URL         string `pg:"url"`
+	Description string `pg:"description"`
 }
 
 type PartnerRepository interface {
