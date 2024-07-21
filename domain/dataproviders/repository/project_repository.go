@@ -12,6 +12,7 @@ import (
 type ProjectRepository interface {
 	// GetAllProjects Получить все проекты
 	GetAllProjects(ctx context.Context) ([]model.Project, error)
+	GetProjectById(ctx context.Context, id int) (model.Project, error)
 }
 
 type projectRepository struct {
@@ -50,4 +51,32 @@ func (p *projectRepository) GetAllProjects(ctx context.Context) ([]model.Project
 	}
 
 	return projects, nil
+}
+
+func (p *projectRepository) GetProjectById(ctx context.Context, id int) (model.Project, error) {
+	pictures := make([]model.Picture, 0, 10)
+	picturesSql := `select url from pictures where pictures.project_id = ?`
+	_, err := p.db.QueryContext(ctx, &pictures, picturesSql, id)
+	if err != nil {
+		log.Printf("error getting pictures: %v", err)
+		return model.Project{}, err
+	}
+
+	project := model.Project{
+		Pictures: pictures,
+	}
+	projectsSql := `select  project_name,
+					builder_name,
+					body,
+					coordinates[0] as latitude, 
+					coordinates[1] as longitude
+			from projects
+			where id = ?`
+
+	_, err = p.db.QueryContext(ctx, &project, projectsSql, id)
+	if err != nil {
+		return project, err
+	}
+
+	return project, nil
 }

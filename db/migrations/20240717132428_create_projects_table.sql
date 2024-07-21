@@ -3,13 +3,13 @@
 -- Создание таблицы projects
 CREATE TABLE projects (
                           id SERIAL PRIMARY KEY,
-                          name VARCHAR NOT NULL,
+                          full_name VARCHAR NOT NULL,
                           url VARCHAR,
                           status VARCHAR,
-                          project_name VARCHAR NOT NULL,
+                          short_name VARCHAR NOT NULL,
                           builder_name VARCHAR NOT NULL,
                           body TEXT,
-                          coordinates VARCHAR
+                          coordinates point
 );
 -- +goose StatementEnd
 

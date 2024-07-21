@@ -9,6 +9,7 @@ import (
 
 type ProjectUsecase interface {
 	GetAllProjects(ctx context.Context) ([]model.Project, error)
+	GetProjectByID(ctx context.Context, id int) (model.Project, error)
 }
 
 type projectUsecase struct {
@@ -30,4 +31,13 @@ func (p *projectUsecase) GetAllProjects(ctx context.Context) ([]model.Project, e
 	}
 
 	return items, nil
+}
+
+func (p *projectUsecase) GetProjectByID(ctx context.Context, id int) (model.Project, error) {
+	project, err := p.projectRepo.GetProjectById(ctx, id)
+	if err != nil {
+		return model.Project{}, err
+	}
+
+	return project, nil
 }
