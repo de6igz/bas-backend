@@ -1,0 +1,90 @@
+definitions:
+  dto.DocDto:
+    properties:
+      docs:
+        items:
+          $ref: '#/definitions/model.Document'
+        type: array
+    type: object
+  dto.Partner:
+    properties:
+      description:
+        type: string
+      url:
+        type: string
+    type: object
+  dto.PartnersDto:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.Partner'
+        type: array
+    type: object
+  dto.ProjectDto:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+      url:
+        type: string
+    type: object
+  dto.ProjectsDto:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.ProjectDto'
+        type: array
+    type: object
+  model.Document:
+    properties:
+      url:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: admin@sk-bas.ru
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is REST-API service for sk-bas.ru
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /v1/docs:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DocDto'
+      summary: получить список всех документов
+  /v1/partners:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PartnersDto'
+      summary: получить список всех партнеров
+  /v1/projects:
+    get:
+      parameters:
+      - description: ID проекта
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ProjectsDto'
+      summary: получить список всех проектов. Чтобы получить инфу об одном проекте
+        нужно указать query param
+swagger: "2.0"
