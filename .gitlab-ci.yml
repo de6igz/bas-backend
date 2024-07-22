@@ -1,0 +1,36 @@
+stages:
+  - build
+  - deploy
+
+# Define a job to create the config.yaml file from the environment variable
+create-config:
+  stage: build
+  script:
+    - echo "Creating config.yaml..."
+    - echo "PROD_CONFIG content:"
+    - echo "$PROD_CONFIG"
+    - mkdir -p ./build/abet
+    - echo "$PROD_CONFIG" > ./build/abet/config.yaml
+    - echo "Content of config.yaml:"
+    - cat ./build/abet/config.yaml
+    - echo "Listing files in build/abet:"
+    - ls -la ./build/abet
+  artifacts:
+    paths:
+      - build/abet/config.yaml
+    expire_in: 1 hour  # артефакты будут доступны в течение 1 часа
+
+start-telegram-bot:
+  stage: deploy
+  environment: production
+  dependencies:
+    - create-config
+  script:
+    - echo "Deploying abet-telegram-bot..."
+    - echo "Listing files in build/abet:"
+    - ls -la ./build/abet
+    - echo "Content of config.yaml:"
+    - cat ./build/abet/config.yaml
+    - echo "Starting Telegram bot..."
+    - make start_telegram-bot-prod
+    - echo "Application successfully deployed."
