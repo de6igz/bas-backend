@@ -24,5 +24,5 @@ deploy:
     - echo "Deploying to server..."
     - ssh user@server_ip "docker pull registry.gitlab.com/$CI_PROJECT_PATH/myapp:latest && docker-compose down && docker-compose up -d"
   only:
-    - master
+    - main
 
