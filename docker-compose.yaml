@@ -10,11 +10,12 @@ services:
     depends_on:
       - db
     environment:
-      - DB_HOST=db
+      - CONFIG_ENV=env
+      - DB_HOST=147.45.151.218
       - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=myapp
+      - DB_USER=executor
+      - DB_PASSWORD=9Kznc.,@U/3.a{
+      - DB_NAME=default_db
 
   db:
     image: postgres:14

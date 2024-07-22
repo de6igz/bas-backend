@@ -1,0 +1,139 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is REST-API service for sk-bas.ru",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "admin@sk-bas.ru"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/v1/docs": {
+            "get": {
+                "summary": "получить список всех документов",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DocDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/partners": {
+            "get": {
+                "summary": "получить список всех партнеров",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.PartnersDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/projects": {
+            "get": {
+                "summary": "получить список всех проектов. Чтобы получить инфу об одном проекте нужно указать query param",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID проекта",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ProjectsDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.DocDto": {
+            "type": "object",
+            "properties": {
+                "docs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Document"
+                    }
+                }
+            }
+        },
+        "dto.Partner": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PartnersDto": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Partner"
+                    }
+                }
+            }
+        },
+        "dto.ProjectDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ProjectsDto": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ProjectDto"
+                    }
+                }
+            }
+        },
+        "model.Document": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

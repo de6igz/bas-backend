@@ -42,7 +42,7 @@ func NewProjectRepository(ctx context.Context, config *config.Config) ProjectRep
 
 // GetAllProjects Получить все проекты
 func (p *projectRepository) GetAllProjects(ctx context.Context) ([]model.Project, error) {
-	sql := `select id,name,url,status from projects`
+	sql := `select id,full_name,url,status from projects`
 	projects := make([]model.Project, 0)
 
 	_, err := p.db.QueryContext(ctx, &projects, sql)
@@ -65,7 +65,7 @@ func (p *projectRepository) GetProjectById(ctx context.Context, id int) (model.P
 	project := model.Project{
 		Pictures: pictures,
 	}
-	projectsSql := `select  project_name,
+	projectsSql := `select  short_name,
 					builder_name,
 					body,
 					coordinates[0] as latitude, 

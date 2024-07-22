@@ -14,7 +14,7 @@ RUN go mod tidy
 COPY . .
 
 # Компилируем приложение
-RUN go build -o main ./cmd
+RUN go build -o main .
 
 CMD ["./main"]
 
