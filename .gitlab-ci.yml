@@ -22,7 +22,7 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying to server..."
-    - ssh user@server_ip "docker pull registry.gitlab.com/$CI_PROJECT_PATH/myapp:latest && docker-compose down && docker-compose up -d"
+    - docker pull CI_PROJECT && docker-compose up -d
   only:
     - main
 
