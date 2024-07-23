@@ -41,7 +41,7 @@ func NewDocRepository(ctx context.Context, config *config.Config) DocRepository 
 
 // GetAllDocs Получить все документы
 func (r *docRepository) GetAllDocs(ctx context.Context) ([]model.Document, error) {
-	sql := `select url from docs`
+	sql := `select preview_url,document_url  from docs`
 	docs := make([]model.Document, 0)
 	_, err := r.db.QueryContext(ctx, &docs, sql)
 	if err != nil {

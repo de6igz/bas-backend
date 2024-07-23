@@ -137,7 +137,10 @@ const docTemplate = `{
         "model.Document": {
             "type": "object",
             "properties": {
-                "url": {
+                "document_url": {
+                    "type": "string"
+                },
+                "preview_url": {
                     "type": "string"
                 }
             }
