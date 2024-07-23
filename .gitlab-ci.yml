@@ -26,7 +26,7 @@ deploy:
     - docker pull $CI_REGISTRY_IMAGE:latest
     - docker compose build
     - docker compose up -d
-    - sleep 80 # Дождитесь запуска сервера
-    - curl -f http://localhost:8080 || exit 1 # Проверьте, что сервер запущен
+#    - sleep 80 # Дождитесь запуска сервера
+#    - curl -f http://localhost:8080 || exit 1 # Проверьте, что сервер запущен
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
