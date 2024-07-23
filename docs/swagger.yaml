@@ -43,7 +43,7 @@ definitions:
       url:
         type: string
     type: object
-host: 89.19.214.20/
+host: 147.45.137.56/
 info:
   contact:
     email: admin@sk-bas.ru
