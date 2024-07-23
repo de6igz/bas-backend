@@ -10,12 +10,12 @@ services:
     depends_on:
       - db
     environment:
-      - CONFIG_ENV=env
-      - DB_HOST=147.45.151.218
-      - DB_PORT=5432
-      - DB_USER=executor
-      - DB_PASSWORD=9Kznc.,@U/3.a{
-      - DB_NAME=default_db
+      - CONFIG_ENV=${CONFIG_ENV}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
 
   db:
     image: postgres:14
