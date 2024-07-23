@@ -3,7 +3,8 @@
 -- Создание таблицы docs
 CREATE TABLE docs (
                       id SERIAL PRIMARY KEY,
-                      url VARCHAR NOT NULL
+                      preview_url VARCHAR NOT NULL,
+                      document_url VARCHAR NOT NULL
 );
 -- +goose StatementEnd
 

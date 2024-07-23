@@ -40,7 +40,9 @@ definitions:
     type: object
   model.Document:
     properties:
-      url:
+      document_url:
+        type: string
+      preview_url:
         type: string
     type: object
 host: 147.45.137.56/api/
