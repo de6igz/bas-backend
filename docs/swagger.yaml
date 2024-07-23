@@ -43,7 +43,7 @@ definitions:
       url:
         type: string
     type: object
-host: localhost:8080
+host: http://89.19.214.20/
 info:
   contact:
     email: admin@sk-bas.ru
