@@ -24,7 +24,7 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8080
+// @host http://89.19.214.20/
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
