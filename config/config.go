@@ -9,12 +9,12 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig   `mapstructure:"is_local"`
+	Server   ServerConfig   `mapstructure:"server"`
 	Database DatabaseConfig `mapstructure:"db"`
 }
 
 type ServerConfig struct {
-	Port int
+	Port int `mapstructure:"port"`
 }
 
 type DatabaseConfig struct {
@@ -33,10 +33,17 @@ func LoadConfig() (*Config, error) {
 		env = "yaml"
 	}
 
-	//viper.SetConfigType("yaml")
 	if env == "env" {
 		viper.AutomaticEnv()
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+		// Explicitly set default values to ensure that Viper can bind them
+		viper.SetDefault("db.host", "localhost")
+		viper.SetDefault("db.port", 5432)
+		viper.SetDefault("db.user", "user")
+		viper.SetDefault("db.password", "password")
+		viper.SetDefault("db.name", "dbname")
+		viper.SetDefault("server.port", 8080)
 	} else {
 		viper.SetConfigName("config")
 		viper.AddConfigPath(".")
@@ -48,18 +55,6 @@ func LoadConfig() (*Config, error) {
 	err := viper.Unmarshal(&config)
 	if err != nil {
 		return nil, err
-	}
-	config = Config{
-		Server: ServerConfig{
-			Port: 8080,
-		},
-		Database: DatabaseConfig{
-			Host:     "localhost",
-			Port:     5432,
-			User:     "postgres",
-			Password: "postgres",
-			Name:     "myapp",
-		},
 	}
 
 	return &config, nil

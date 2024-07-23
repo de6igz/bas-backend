@@ -16,6 +16,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - SERVER_PORT=8080
 
 #  db:
 #    image: postgres:14
