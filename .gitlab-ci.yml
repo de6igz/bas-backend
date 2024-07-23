@@ -11,7 +11,9 @@ before_script:
 build:
   stage: build
   script:
-    - docker login --username $GITLAB_USERNAME --password $GITLAB_TOKEN
+    - echo $GITLAB_USERNAME
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $GITLAB_USERNAME -p $GITLAB_TOKEN registry.gitlab.com
     - docker build -t registry.gitlab.com/bas3011029/bas-backend .
     - docker push registry.gitlab.com/bas3011029/bas-backend
   only:
