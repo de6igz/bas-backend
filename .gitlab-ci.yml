@@ -22,7 +22,7 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying to server..."
-    - docker pull CI_PROJECT && docker-compose up -d
+    - docker pull $CI_PROJECT && docker-compose up -d
   only:
     - main
 
