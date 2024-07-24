@@ -4,10 +4,10 @@ import "context"
 
 type Project struct {
 	ID          int       `json:"id" pg:"id"`
-	Name        string    `json:"name" pg:"name"`
+	Name        string    `json:"full_name" pg:"full_name"`
 	URL         string    `json:"url" pg:"url"`
 	Status      string    `json:"status" pg:"status"`
-	ShortName   string    `json:"short_name" pg:"project_name"`
+	ShortName   string    `json:"short_name" pg:"short_name"`
 	BuilderName string    `json:"builder_name" pg:"builder_name"`
 	Body        string    `json:"body" pg:"body"`
 	Pictures    []Picture `json:"pictures" pg:"pictures"`
