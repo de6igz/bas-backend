@@ -45,7 +45,7 @@ definitions:
       preview_url:
         type: string
     type: object
-host: 147.45.137.56/api/
+host: 94.241.174.163/api/
 info:
   contact:
     email: admin@sk-bas.ru
