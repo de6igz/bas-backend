@@ -12,8 +12,10 @@ services:
 #      - db
     environment:
       - CONFIG_ENV=${CONFIG_ENV}
-      - DB_PATH=${DB_PATH}
+      - DB_PATH=${DB_PATH:-/app/db/data.sqlite}
       - SERVER_PORT=${SERVER_PORT}
+    volumes:
+      - ./db/data.sqlite:/app/db/data.sqlite
 
 #  db:
 #    image: postgres:14
