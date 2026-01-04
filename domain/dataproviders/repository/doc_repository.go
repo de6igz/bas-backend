@@ -1,12 +1,10 @@
 package repository
 
 import (
-	"bas-backend/config"
 	"bas-backend/domain/model"
 	"context"
-	"github.com/go-pg/pg/v10"
+	"database/sql"
 	"log"
-	"strconv"
 )
 
 type DocRepository interface {
@@ -15,39 +13,36 @@ type DocRepository interface {
 }
 
 type docRepository struct {
-	db *pg.DB
+	db *sql.DB
 }
 
-func NewDocRepository(ctx context.Context, config *config.Config) DocRepository {
-
-	connection := pg.Connect(&pg.Options{
-		Addr:            config.Database.Host + ":" + strconv.Itoa(config.Database.Port),
-		User:            config.Database.User,
-		Password:        config.Database.Password,
-		Database:        config.Database.Name,
-		MaxRetries:      3,
-		MaxRetryBackoff: 3,
-	})
-
-	err := connection.Ping(ctx)
-	if err != nil {
+func NewDocRepository(ctx context.Context, db *sql.DB) DocRepository {
+	if err := db.PingContext(ctx); err != nil {
 		log.Fatalf("error connecting to database: %v", err)
 	}
 
 	return &docRepository{
-		db: connection,
+		db: db,
 	}
 }
 
 // GetAllDocs Получить все документы
 func (r *docRepository) GetAllDocs(ctx context.Context) ([]model.Document, error) {
-	sql := `select preview_url,document_url  from docs`
-	docs := make([]model.Document, 0)
-	_, err := r.db.QueryContext(ctx, &docs, sql)
+	sqlText := `select preview_url, document_url from docs`
+	rows, err := r.db.QueryContext(ctx, sqlText)
 	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-		return docs, err
+	docs := make([]model.Document, 0)
+	for rows.Next() {
+		var doc model.Document
+		if err := rows.Scan(&doc.PreviewURL, &doc.DocumentURL); err != nil {
+			return nil, err
+		}
+		docs = append(docs, doc)
 	}
 
-	return docs, nil
+	return docs, rows.Err()
 }
