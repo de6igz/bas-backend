@@ -29,7 +29,7 @@ FROM alpine:3.20
 WORKDIR /app
 
 # Необходимые зависимости для sqlite
-RUN apk add --no-cache ca-certificates sqlite-libs
+RUN #apk add --no-cache ca-certificates sqlite-libs
 
 COPY --from=builder /app/main .
 COPY --from=builder /app/db ./db
