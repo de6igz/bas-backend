@@ -1,5 +1,5 @@
-# Используем официальный образ Golang в качестве базового образа
-FROM golang:1.22.5 AS builder
+# Используем официальный образ Golang (alpine) в качестве базового образа для сборки
+FROM golang:1.22.5-alpine AS builder
 
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
@@ -8,6 +8,9 @@ WORKDIR /app
 ENV CGO_ENABLED=1 \
     GOFLAGS=-mod=vendor \
     GOPROXY=off
+
+# Устанавливаем зависимости для сборки (компилятор + sqlite)
+RUN apk add --no-cache build-base sqlite-dev
 
 # Копируем исходный код (включая vendor)
 COPY . .
@@ -22,11 +25,11 @@ RUN if [ ! -d vendor ]; then \
 RUN go build -o main .
 
 # Минимальный образ для запуска
-FROM debian:bookworm-slim
+FROM alpine:3.20
 WORKDIR /app
 
 # Необходимые зависимости для sqlite
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates libsqlite3-0 && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ca-certificates sqlite-libs
 
 COPY --from=builder /app/main .
 COPY --from=builder /app/db ./db
