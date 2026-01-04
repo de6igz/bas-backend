@@ -18,11 +18,7 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	Name     string `mapstructure:"name"`
+	Path string `mapstructure:"path"`
 }
 
 func LoadConfig() (*Config, error) {
@@ -38,11 +34,7 @@ func LoadConfig() (*Config, error) {
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 		// Explicitly set default values to ensure that Viper can bind them
-		viper.SetDefault("db.host", "localhost")
-		viper.SetDefault("db.port", 5432)
-		viper.SetDefault("db.user", "user")
-		viper.SetDefault("db.password", "password")
-		viper.SetDefault("db.name", "dbname")
+		viper.SetDefault("db.path", "./db/data.sqlite")
 		viper.SetDefault("server.port", 8080)
 	} else {
 		viper.SetConfigName("config")

@@ -1,12 +1,10 @@
 package repository
 
 import (
-	"bas-backend/config"
 	"bas-backend/domain/model"
 	"context"
-	"github.com/go-pg/pg/v10"
+	"database/sql"
 	"log"
-	"strconv"
 )
 
 type ProjectRepository interface {
@@ -16,49 +14,59 @@ type ProjectRepository interface {
 }
 
 type projectRepository struct {
-	db *pg.DB
+	db *sql.DB
 }
 
-func NewProjectRepository(ctx context.Context, config *config.Config) ProjectRepository {
-
-	connection := pg.Connect(&pg.Options{
-		Addr:            config.Database.Host + ":" + strconv.Itoa(config.Database.Port),
-		User:            config.Database.User,
-		Password:        config.Database.Password,
-		Database:        config.Database.Name,
-		MaxRetries:      3,
-		MaxRetryBackoff: 3,
-	})
-
-	err := connection.Ping(ctx)
-	if err != nil {
+func NewProjectRepository(ctx context.Context, db *sql.DB) ProjectRepository {
+	if err := db.PingContext(ctx); err != nil {
 		log.Fatalf("error connecting to database: %v", err)
 	}
 
 	return &projectRepository{
-		db: connection,
+		db: db,
 	}
 }
 
 // GetAllProjects Получить все проекты
 func (p *projectRepository) GetAllProjects(ctx context.Context) ([]model.Project, error) {
-	sql := `select id,full_name,url,status from projects`
-	projects := make([]model.Project, 0)
-
-	_, err := p.db.QueryContext(ctx, &projects, sql)
+	sqlText := `select id, full_name, url, status from projects`
+	rows, err := p.db.QueryContext(ctx, sqlText)
 	if err != nil {
-		return projects, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	projects := make([]model.Project, 0)
+	for rows.Next() {
+		var project model.Project
+		if err := rows.Scan(&project.ID, &project.Name, &project.URL, &project.Status); err != nil {
+			return nil, err
+		}
+		projects = append(projects, project)
 	}
 
-	return projects, nil
+	return projects, rows.Err()
 }
 
 func (p *projectRepository) GetProjectById(ctx context.Context, id int) (model.Project, error) {
 	pictures := make([]model.Picture, 0, 10)
 	picturesSql := `select url from pictures where pictures.project_id = ?`
-	_, err := p.db.QueryContext(ctx, &pictures, picturesSql, id)
+
+	rows, err := p.db.QueryContext(ctx, picturesSql, id)
 	if err != nil {
 		log.Printf("error getting pictures: %v", err)
+		return model.Project{}, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var picture model.Picture
+		if err := rows.Scan(&picture.Url); err != nil {
+			return model.Project{}, err
+		}
+		pictures = append(pictures, picture)
+	}
+	if err := rows.Err(); err != nil {
 		return model.Project{}, err
 	}
 
@@ -68,12 +76,12 @@ func (p *projectRepository) GetProjectById(ctx context.Context, id int) (model.P
 	projectsSql := `select  short_name,
 					builder_name,
 					body,
-					coordinates[0] as latitude, 
-					coordinates[1] as longitude
+					latitude, 
+					longitude
 			from projects
 			where id = ?`
 
-	_, err = p.db.QueryContext(ctx, &project, projectsSql, id)
+	err = p.db.QueryRowContext(ctx, projectsSql, id).Scan(&project.ShortName, &project.BuilderName, &project.Body, &project.Latitude, &project.Longitude)
 	if err != nil {
 		return project, err
 	}

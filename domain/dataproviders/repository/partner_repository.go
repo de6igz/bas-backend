@@ -1,12 +1,10 @@
 package repository
 
 import (
-	"bas-backend/config"
 	"bas-backend/domain/model"
 	"context"
-	"github.com/go-pg/pg/v10"
+	"database/sql"
 	"log"
-	"strconv"
 )
 
 type PartnerRepository interface {
@@ -14,39 +12,36 @@ type PartnerRepository interface {
 }
 
 type partnerRepository struct {
-	db *pg.DB
+	db *sql.DB
 }
 
-func NewPartnerRepository(ctx context.Context, config *config.Config) PartnerRepository {
-
-	connection := pg.Connect(&pg.Options{
-		Addr:            config.Database.Host + ":" + strconv.Itoa(config.Database.Port),
-		User:            config.Database.User,
-		Password:        config.Database.Password,
-		Database:        config.Database.Name,
-		MaxRetries:      3,
-		MaxRetryBackoff: 3,
-	})
-
-	err := connection.Ping(ctx)
-	if err != nil {
+func NewPartnerRepository(ctx context.Context, db *sql.DB) PartnerRepository {
+	if err := db.PingContext(ctx); err != nil {
 		log.Fatalf("error connecting to database: %v", err)
 	}
 
 	return &partnerRepository{
-		db: connection,
+		db: db,
 	}
 }
 
 func (p *partnerRepository) GetAllPartners(ctx context.Context) ([]model.Partner, error) {
-	sql := "select url,description from partners"
-	var partners []model.Partner
-	_, err := p.db.QueryContext(ctx, &partners, sql)
+	query := "select url, description from partners"
+	rows, err := p.db.QueryContext(ctx, query)
 	if err != nil {
 		log.Printf("error getting partners: %v", err)
-
 		return nil, err
 	}
+	defer rows.Close()
 
-	return partners, nil
+	partners := make([]model.Partner, 0)
+	for rows.Next() {
+		var partner model.Partner
+		if err := rows.Scan(&partner.URL, &partner.Description); err != nil {
+			return nil, err
+		}
+		partners = append(partners, partner)
+	}
+
+	return partners, rows.Err()
 }
