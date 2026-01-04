@@ -6,14 +6,14 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - 8080:8080
       - "9091:9091"
 #    depends_on:
 #      - db
     environment:
-      - CONFIG_ENV=${CONFIG_ENV}
-      - DB_PATH=${DB_PATH:-/app/db/data.sqlite}
-      - SERVER_PORT=${SERVER_PORT}
+      - CONFIG_ENV=env
+      - DB_PATH=/app/db/data.sqlite
+      - SERVER_PORT=8080
     volumes:
       - ./db/data.sqlite:/app/db/data.sqlite
 
